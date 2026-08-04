@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Balaji M — Resume</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2027;
+    --ink-soft:#3A414C;
+    --muted:#6B7280;
+    --paper:#FBFBFA;
+    --sidebar:#1E2430;
+    --sidebar-text:#C6CDD8;
+    --sidebar-muted:#8991A3;
+    --line:#E4E3DC;
+    --blue:#4C8DCB;
+    --blue-dark:#1F5C93;
+    --green:#4E9A63;
+    --green-dark:#2C6B3D;
+    --amber:#B8862E;
+    --amber-dark:#8A6421;
+    --card-blue-bg:#E8F0F8;
+    --card-green-bg:#E9F4EC;
+    --card-amber-bg:#F7EFDF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#EDEDE7;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:32px 12px;
+  }
+  .page{
+    width:850px;
+    max-width:100%;
+    background:var(--paper);
+    box-shadow:0 1px 3px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.10);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  /* ---- Tab bar (signature element) ---- */
+  .tabbar{
+    background:#161B24;
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    height:36px;
+    gap:6px;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:#E5645A;}
+  .dot.y{background:#E5B95C;}
+  .dot.g{background:#61C078;}
+  .filetab{
+    margin-left:16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--sidebar-muted);
+    letter-spacing:0.2px;
+  }
+  .filetab b{color:var(--sidebar-text);font-weight:500;}
+
+  /* ---- Header ---- */
+  .header{
+    background:var(--sidebar);
+    color:var(--sidebar-text);
+    padding:36px 44px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .header-left{display:flex;align-items:center;gap:20px;}
+  .avatar{
+    width:64px;height:64px;border-radius:10px;
+    background:linear-gradient(135deg,#2C3444,#1E2430);
+    border:1px solid #333C4E;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;font-size:22px;color:var(--sidebar-text);
+    flex-shrink:0;
+  }
+  .name{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:38px;
+    font-weight:700;
+    color:#F4F5F7;
+    line-height:1.05;
+    margin:0;
+  }
+  .role{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    color:var(--sidebar-muted);
+    margin-top:8px;
+  }
+  .role .pipe{color:#4A5468;margin:0 8px;}
+  .header-right{
+    font-size:12.5px;
+    line-height:1.65;
+    color:var(--sidebar-muted);
+    text-align:right;
+    min-width:210px;
+  }
+  .header-right .bold{color:var(--sidebar-text);font-weight:500;}
+
+  /* ---- Layout ---- */
+  .body{
+    display:grid;
+    grid-template-columns:1fr 258px;
+  }
+  .main{padding:30px 40px 40px;}
+  .side{
+    background:#F2F1EB;
+    border-left:1px solid var(--line);
+    padding:30px 26px 40px;
+  }
+
+  /* ---- Section headings (code-comment style) ---- */
+  .sec-head{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    font-weight:500;
+    color:var(--green-dark);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0 0 16px;
+    letter-spacing:0.3px;
+  }
+  .sec-head::before{content:"//";color:#A9AA9F;}
+  .side .sec-head{margin-top:30px;}
+  .side .sec-head:first-child{margin-top:0;}
+
+  .entry{margin-bottom:18px;}
+  .entry:last-child{margin-bottom:0;}
+  .entry-title{
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink);
+    margin:0 0 2px;
+  }
+  .entry-title .org{font-weight:400;color:var(--ink-soft);}
+  .entry-meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--blue-dark);
+    margin:2px 0 6px;
+  }
+  .entry-meta .sep{color:var(--muted);margin:0 6px;}
+  .entry-desc{
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin:0;
+  }
+
+  .section{margin-bottom:32px;}
+  .section:last-child{margin-bottom:0;}
+
+  /* project tag pill */
+  .stack{
+    display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px;
+  }
+  .stack span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    padding:2px 8px;
+    border-radius:4px;
+    background:var(--card-blue-bg);
+    color:var(--blue-dark);
+    border:1px solid #D3E1EF;
+  }
+
+  /* ---- Sidebar blocks ---- */
+  .contact-list{list-style:none;margin:0 0 4px;padding:0;font-size:12.5px;color:var(--ink-soft);line-height:1.7;}
+  .skill-group{margin-bottom:14px;}
+  .skill-group:last-child{margin-bottom:0;}
+  .skill-label{
+    font-size:11px;font-weight:600;color:var(--ink);
+    text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    padding:3px 8px;
+    border-radius:4px;
+    border:1px solid;
+  }
+  .chip.blue{background:var(--card-blue-bg);color:var(--blue-dark);border-color:#D3E1EF;}
+  .chip.green{background:var(--card-green-bg);color:var(--green-dark);border-color:#D3E9D9;}
+  .chip.amber{background:var(--card-amber-bg);color:var(--amber-dark);border-color:#EBDBB8;}
+
+  .cert{margin-bottom:12px;font-size:12.5px;line-height:1.5;color:var(--ink-soft);}
+  .cert:last-child{margin-bottom:0;}
+  .cert b{color:var(--ink);font-weight:600;}
+  .cert .src{color:var(--green-dark);font-weight:500;}
+
+  .lang-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;}
+  .lang-row:last-child{margin-bottom:0;}
+  .lang-row b{color:var(--ink);font-weight:600;}
+  .lang-row span.level{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);}
+
+  .ach{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:12px;padding-left:14px;position:relative;}
+  .ach:last-child{margin-bottom:0;}
+  .ach::before{content:"›";position:absolute;left:0;color:var(--blue);font-weight:600;}
+  .ach b{color:var(--ink);font-weight:600;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .page{box-shadow:none;width:100%;}
+  }
+  @media (max-width:720px){
+    .body{grid-template-columns:1fr;}
+    .side{border-left:none;border-top:1px solid var(--line);}
+    .header{flex-direction:column;align-items:flex-start;}
+    .header-right{text-align:left;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="tabbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="filetab"><b>balaji_m</b>.resume</span>
+  </div>
+
+  <div class="header">
+    <div class="header-left">
+      <div class="avatar">BM</div>
+      <div>
+        <p class="name">Balaji M</p>
+        <p class="role">Aspiring BCA Graduate<span class="pipe">|</span>Programming &amp; Problem&#8209;Solving</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div>No.31, Iyyanar Kovil Street,<br>Thirukkanur, Puducherry &#8211; 605501</div>
+      <div class="bold">+91 63814 29273</div>
+      <div class="bold">balajitechscholar1510@gmail.com</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <div class="section">
+        <p class="sec-head">education</p>
+        <div class="entry">
+          <p class="entry-title">Bachelor of Computer Applications <span class="org">— Indira Gandhi College of Arts and Science, Puducherry</span></p>
+          <p class="entry-meta">2022 &#8211; 2025<span class="sep">·</span>CGPA 7.0 / 10.0</p>
+        </div>
+        <div class="entry">
+          <p class="entry-title">HSC <span class="org">— Bonne Nehru Higher Secondary School, Pondicherry</span></p>
+          <p class="entry-meta">2021 &#8211; 2022<span class="sep">·</span>95%</p>
+        </div>
+        <div class="entry">
+          <p class="entry-title">SSLC <span class="org">— Chanakya Matric Higher Secondary School, Gingee</span></p>
+          <p class="entry-meta">2019 &#8211; 2020<span class="sep">·</span>94.8%</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <p class="sec-head">projects</p>
+        <div class="entry">
+          <p class="entry-title">E&#8209;Commerce Website</p>
+          <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>ASP</span></div>
+          <p class="entry-desc">Built a basic online shopping website with product listings and navigation.</p>
+        </div>
+        <div class="entry">
+          <p class="entry-title">Inventory Web Application</p>
+          <div class="stack"><span>Python</span><span>Flask</span><span>SQLite</span><span>AJAX</span></div>
+          <p class="entry-desc">Implemented Flask routes for CRUD operations, used SQLite for inventory management, and integrated AJAX for real&#8209;time stock updates.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <p class="sec-head">internships</p>
+        <div class="entry">
+          <p class="entry-title">Infosys Springboard <span class="org">— Personal Finance Management System</span></p>
+          <p class="entry-meta">Feb 2025 &#8211; Apr 2025</p>
+          <p class="entry-desc">Completed hands-on assignments using the Python stack, and learned practical implementation of backend development, data handling, and reporting features.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="side">
+
+      <p class="sec-head">skills</p>
+      <div class="skill-group">
+        <p class="skill-label">Languages</p>
+        <div class="chips">
+          <span class="chip blue">Java</span><span class="chip blue">C++</span>
+          <span class="chip blue">C</span><span class="chip blue">Python</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-label">Web</p>
+        <div class="chips">
+          <span class="chip green">HTML</span><span class="chip green">CSS</span><span class="chip green">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-label">Tools</p>
+        <div class="chips">
+          <span class="chip amber">Git</span><span class="chip amber">SQLite</span><span class="chip amber">Excel</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-label">Core concepts</p>
+        <div class="chips"><span class="chip blue">OOP (Java / C++)</span></div>
+      </div>
+
+      <p class="sec-head">certifications</p>
+      <div class="cert"><b>Programming using Java</b> (110 hrs)<br><span class="src">Infosys Springboard</span></div>
+      <div class="cert"><b>HTML and CSS Fundamentals</b> (25 hrs)<br><span class="src">Udemy</span></div>
+
+      <p class="sec-head">languages</p>
+      <div class="lang-row"><b>Tamil</b><span class="level">native</span></div>
+      <div class="lang-row"><b>English</b><span class="level">intermediate</span></div>
+
+      <p class="sec-head">achievements</p>
+      <div class="ach"><b>Solved</b> 80+ problems on GeeksforGeeks, demonstrating strong algorithmic skills.</div>
+      <div class="ach"><b>Selected</b> for Mathtober and Hacktober during Zestober 2024 by Zoho, recognizing problem&#8209;solving and coding ability.</div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
