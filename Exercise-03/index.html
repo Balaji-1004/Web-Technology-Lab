@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia Run — 20 Question Quiz</title>
+<style>
+  :root{
+    --ink: #1b1f23;
+    --paper: #eef1ea;
+    --panel: #ffffff;
+    --line: #1b1f23;
+    --accent: #3d5a80;
+    --accent-2: #e07a5f;
+    --correct: #2e7d4f;
+    --wrong: #b0413e;
+    --mono: 'Courier New', Courier, monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+    background-blend-mode: normal;
+    color:var(--ink);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 16px;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-color: rgba(238,241,234,0.86);
+    pointer-events:none;
+    z-index:0;
+  }
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:640px;
+  }
+  .scoreboard{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:14px;
+    font-family:var(--mono);
+    letter-spacing:0.5px;
+  }
+  .scoreboard .title{
+    font-family:'Georgia', serif;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:0.5px;
+  }
+  .scoreboard .tally{
+    font-size:0.85rem;
+    color:var(--accent);
+    border:1.5px solid var(--ink);
+    padding:3px 10px;
+    background:var(--panel);
+    border-radius:2px;
+  }
+  .track{
+    height:6px;
+    width:100%;
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    margin-bottom:26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .track-fill{
+    height:100%;
+    width:0%;
+    background:repeating-linear-gradient(
+      45deg,
+      var(--accent),
+      var(--accent) 6px,
+      var(--accent-2) 6px,
+      var(--accent-2) 12px
+    );
+    transition: width 0.35s ease;
+  }
+  .card{
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    padding:28px 26px;
+    min-height:340px;
+    display:flex;
+    flex-direction:column;
+  }
+  .qnum{
+    font-family:var(--mono);
+    font-size:0.85rem;
+    color:var(--accent-2);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    margin-bottom:10px;
+  }
+  .qtext{
+    font-size:1.35rem;
+    line-height:1.4;
+    margin:0 0 24px 0;
+    font-weight:700;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex:1;
+  }
+  .opt{
+    text-align:left;
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+    padding:13px 16px;
+    font-family:'Georgia', serif;
+    font-size:1rem;
+    cursor:pointer;
+    border-radius:2px;
+    transition: transform 0.08s ease, background 0.15s ease;
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+  }
+  .opt .letter{
+    font-family:var(--mono);
+    font-weight:700;
+    color:var(--accent);
+    min-width:18px;
+  }
+  .opt:hover:not(:disabled){
+    background:#fff;
+    transform:translate(-2px,-2px);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .opt:disabled{
+    cursor:default;
+  }
+  .opt.correct{
+    background:#dff0e4;
+    border-color:var(--correct);
+  }
+  .opt.correct .letter{ color:var(--correct); }
+  .opt.wrong{
+    background:#f6dedd;
+    border-color:var(--wrong);
+  }
+  .opt.wrong .letter{ color:var(--wrong); }
+
+  .feedback{
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:0.9rem;
+    min-height:20px;
+  }
+  .feedback.correct-text{ color:var(--correct); }
+  .feedback.wrong-text{ color:var(--wrong); }
+
+  /* Results screen */
+  .results{
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    padding:36px 30px;
+    text-align:center;
+  }
+  .results h2{
+    font-family:var(--mono);
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:0.95rem;
+    color:var(--accent-2);
+    margin:0 0 8px 0;
+  }
+  .bigscore{
+    font-size:4rem;
+    font-weight:700;
+    line-height:1;
+    margin:10px 0;
+  }
+  .bigscore span{
+    font-size:1.8rem;
+    color:var(--accent);
+  }
+  .remark{
+    font-size:1.05rem;
+    margin:14px 0 26px 0;
+    color:#333;
+  }
+  .breakdown{
+    text-align:left;
+    border-top:1.5px solid var(--ink);
+    padding-top:16px;
+    margin-bottom:24px;
+    max-height:260px;
+    overflow-y:auto;
+  }
+  .breakdown-row{
+    display:flex;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:0.82rem;
+    padding:6px 0;
+    border-bottom:1px dashed #ccc;
+  }
+  .breakdown-row .mark{
+    font-weight:700;
+    min-width:16px;
+  }
+  .breakdown-row.correct .mark{ color:var(--correct); }
+  .breakdown-row.wrong .mark{ color:var(--wrong); }
+  .restart{
+    font-family:var(--mono);
+    font-weight:700;
+    background:var(--accent-2);
+    color:var(--ink);
+    border:1.5px solid var(--ink);
+    padding:12px 26px;
+    cursor:pointer;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-size:0.85rem;
+  }
+  .restart:hover{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .hidden{ display:none !important; }
+
+  @media (max-width:480px){
+    .qtext{ font-size:1.15rem; }
+    .card, .results{ padding:20px 18px; }
+    .bigscore{ font-size:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="scoreboard">
+    <div class="title">Trivia Run</div>
+    <div class="tally" id="tally">0 / 20</div>
+  </div>
+
+  <div class="track"><div class="track-fill" id="trackFill"></div></div>
+
+  <div class="card" id="quizCard">
+    <div class="qnum" id="qnum">Question 1 of 20</div>
+    <p class="qtext" id="qtext"></p>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="results hidden" id="results">
+    <h2>Final Score</h2>
+    <div class="bigscore" id="bigscore">0<span> / 20</span></div>
+    <p class="remark" id="remark"></p>
+    <div class="breakdown" id="breakdown"></div>
+    <button class="restart" id="restartBtn">Play Again</button>
+  </div>
+
+</div>
+
+<script>
+  const questions = [
+    { q: "What does CPU stand for?", options: ["Central Process Unit","Central Processing Unit","Computer Personal Unit","Central Processor Utility"], answer: 1 },
+    { q: "Which data structure uses LIFO (Last In First Out)?", options: ["Queue","Stack","Linked List","Array"], answer: 1 },
+    { q: "What is the time complexity of binary search on a sorted array?", options: ["O(n)","O(n log n)","O(log n)","O(1)"], answer: 2 },
+    { q: "Which of these is NOT a programming paradigm?", options: ["Object-Oriented","Functional","Procedural","Alphabetical"], answer: 3 },
+    { q: "What does SQL stand for?", options: ["Structured Query Language","Simple Query Logic","Sequential Query Language","Structured Question Language"], answer: 0 },
+    { q: "Which sorting algorithm has the best average time complexity?", options: ["Bubble Sort","Selection Sort","Merge Sort","Insertion Sort"], answer: 2 },
+    { q: "In binary, what is the decimal number 5 represented as?", options: ["100","101","110","111"], answer: 1 },
+    { q: "What does 'HTML' stand for?", options: ["HyperText Markup Language","HighText Machine Language","HyperTransfer Markup Language","HyperText Modern Language"], answer: 0 },
+    { q: "Which of these is a linear data structure?", options: ["Tree","Graph","Array","Hash Map"], answer: 2 },
+    { q: "What is the primary purpose of an operating system?", options: ["Write code","Manage hardware and software resources","Design websites","Compile programs only"], answer: 1 },
+    { q: "Which protocol is used to securely transfer web data?", options: ["FTP","HTTP","HTTPS","SMTP"], answer: 2 },
+    { q: "What does 'RAM' stand for?", options: ["Random Access Memory","Read Access Memory","Random Available Memory","Run Access Memory"], answer: 0 },
+    { q: "Which of these languages is primarily used for styling web pages?", options: ["JavaScript","CSS","Python","HTML"], answer: 1 },
+    { q: "What is recursion in programming?", options: ["A loop that never ends","A function calling itself","A type of variable","A sorting technique"], answer: 1 },
+    { q: "Which data structure follows FIFO (First In First Out)?", options: ["Stack","Queue","Tree","Graph"], answer: 1 },
+    { q: "What is the worst-case time complexity of Quick Sort?", options: ["O(n log n)","O(n)","O(n^2)","O(log n)"], answer: 2 },
+    { q: "Which of these is used to uniquely identify a row in a database table?", options: ["Foreign Key","Primary Key","Index","Schema"], answer: 1 },
+    { q: "What does 'IDE' stand for in software development?", options: ["Integrated Development Environment","Internal Design Editor","Integrated Design Engine","Interface Development Editor"], answer: 0 },
+    { q: "Which of these is an example of a NoSQL database?", options: ["MySQL","PostgreSQL","MongoDB","Oracle DB"], answer: 2 },
+    { q: "What is the main function of a compiler?", options: ["Execute code line by line","Translate source code into machine code","Debug code","Manage memory"], answer: 1 }
+  ];
+
+  let current = 0;
+  let score = 0;
+  let userAnswers = [];
+  let locked = false;
+
+  const qnumEl = document.getElementById('qnum');
+  const qtextEl = document.getElementById('qtext');
+  const optionsEl = document.getElementById('options');
+  const feedbackEl = document.getElementById('feedback');
+  const tallyEl = document.getElementById('tally');
+  const trackFill = document.getElementById('trackFill');
+  const quizCard = document.getElementById('quizCard');
+  const results = document.getElementById('results');
+  const bigscore = document.getElementById('bigscore');
+  const remark = document.getElementById('remark');
+  const breakdown = document.getElementById('breakdown');
+  const restartBtn = document.getElementById('restartBtn');
+
+  const letters = ['A','B','C','D','E','F'];
+
+  function loadQuestion(){
+    locked = false;
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+
+    const item = questions[current];
+    qnumEl.textContent = `Question ${current+1} of ${questions.length}`;
+    qtextEl.textContent = item.q;
+    optionsEl.innerHTML = '';
+
+    item.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt}</span>`;
+      btn.addEventListener('click', () => selectAnswer(idx, btn));
+      optionsEl.appendChild(btn);
+    });
+
+    updateTrack();
+    updateTally();
+  }
+
+  function selectAnswer(idx, btn){
+    if (locked) return;
+    locked = true;
+
+    const item = questions[current];
+    const correctIdx = item.answer;
+    const allOpts = optionsEl.querySelectorAll('.opt');
+
+    allOpts.forEach(o => o.disabled = true);
+
+    if (idx === correctIdx){
+      btn.classList.add('correct');
+      score++;
+      feedbackEl.textContent = 'Correct!';
+      feedbackEl.classList.add('correct-text');
+    } else {
+      btn.classList.add('wrong');
+      allOpts[correctIdx].classList.add('correct');
+      feedbackEl.textContent = `Incorrect — the answer was "${item.options[correctIdx]}"`;
+      feedbackEl.classList.add('wrong-text');
+    }
+
+    userAnswers.push({
+      question: item.q,
+      chosen: item.options[idx],
+      correct: item.options[correctIdx],
+      isCorrect: idx === correctIdx
+    });
+
+    updateTally();
+
+    setTimeout(() => {
+      current++;
+      if (current < questions.length){
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }, 900);
+  }
+
+  function updateTally(){
+    tallyEl.textContent = `${score} / ${questions.length}`;
+  }
+
+  function updateTrack(){
+    const pct = (current / questions.length) * 100;
+    trackFill.style.width = pct + '%';
+  }
+
+  function showResults(){
+    quizCard.classList.add('hidden');
+    trackFill.style.width = '100%';
+    results.classList.remove('hidden');
+
+    bigscore.innerHTML = `${score}<span> / ${questions.length}</span>`;
+
+    const pct = Math.round((score / questions.length) * 100);
+    let msg;
+    if (pct === 100) msg = "Flawless run. Nothing gets past you.";
+    else if (pct >= 80) msg = "Sharp work — that's a strong score.";
+    else if (pct >= 50) msg = "Solid effort. A little more polish and you'll ace it.";
+    else msg = "Rough round — give it another go.";
+    remark.textContent = `${msg} (${pct}%)`;
+
+    breakdown.innerHTML = '';
+    userAnswers.forEach((a, i) => {
+      const row = document.createElement('div');
+      row.className = 'breakdown-row ' + (a.isCorrect ? 'correct' : 'wrong');
+      row.innerHTML = `<span class="mark">${a.isCorrect ? '✓' : '✕'}</span><span>Q${i+1}: ${a.question} — your answer: ${a.chosen}${a.isCorrect ? '' : ' (correct: ' + a.correct + ')'}</span>`;
+      breakdown.appendChild(row);
+    });
+  }
+
+  restartBtn.addEventListener('click', () => {
+    current = 0;
+    score = 0;
+    userAnswers = [];
+    results.classList.add('hidden');
+    quizCard.classList.remove('hidden');
+    loadQuestion();
+  });
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
