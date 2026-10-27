@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Library</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <p class="exercise-label">Exercise 10</p>
+      <h1>Book Library</h1>
+      <p>Load book details using jQuery AJAX and JSON.</p>
+    </header>
+
+    <section class="library-panel" aria-labelledby="library-heading">
+      <h2 id="library-heading">Storybooks</h2>
+      <button id="load-books" type="button">Load Books</button>
+    </section>
+
+    <p id="loading-message" class="loading-message" role="status" hidden>Loading books...</p>
+    <p id="error-message" class="error-message" role="alert" hidden></p>
+    <section id="books-list" class="books-list" aria-label="Books" aria-live="polite"></section>
+
+    <p class="api-note">Sample data is loaded from the local books.json file.</p>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

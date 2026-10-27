@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "The Jungle Book",
+    "price": 250
+  },
+  {
+    "id": 2,
+    "title": "Alice in Wonderland",
+    "price": 180
+  },
+  {
+    "id": 3,
+    "title": "The Adventures of Tom Sawyer",
+    "price": 225
+  },
+  {
+    "id": 4,
+    "title": "Treasure Island",
+    "price": 275
+  },
+  {
+    "id": 5,
+    "title": "The Secret Garden",
+    "price": 210
+  },
+  {
+    "id": 6,
+    "title": "Peter Pan",
+    "price": 195
+  },
+  {
+    "id": 7,
+    "title": "The Wizard of Oz",
+    "price": 240
+  },
+  {
+    "id": 8,
+    "title": "The Railway Children",
+    "price": 230
+  },
+  {
+    "id": 9,
+    "title": "Around the World in Eighty Days",
+    "price": 260
+  },
+  {
+    "id": 10,
+    "title": "The Wonderful Adventures of Nils",
+    "price": 290
+  },
+  {
+    "id": 11,
+    "title": "Black Beauty",
+    "price": 200
+  },
+  {
+    "id": 12,
+    "title": "The Swiss Family Robinson",
+    "price": 280
+  }
+]

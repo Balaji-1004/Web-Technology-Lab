@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Information</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <p class="exercise-label">Exercise 9</p>
+      <h1>Weather Information</h1>
+      <p>Fetch weather data using AJAX and JSON.</p>
+    </header>
+
+    <section class="search-panel" aria-labelledby="search-heading">
+      <h2 id="search-heading">Check a city</h2>
+      <form id="weather-form">
+        <label for="city">City:</label>
+        <div class="search-controls">
+          <input type="text" id="city" name="city" placeholder="Chennai" autocomplete="off">
+          <button type="submit">Get Weather</button>
+        </div>
+      </form>
+    </section>
+
+    <p id="loading-message" class="loading-message" role="status" hidden>Loading...</p>
+    <p id="error-message" class="error-message" role="alert" hidden></p>
+
+    <section id="weather-card" class="weather-card" aria-live="polite" hidden>
+      <h2>Weather Details</h2>
+      <dl>
+        <div>
+          <dt>City</dt>
+          <dd id="weather-city"></dd>
+        </div>
+        <div>
+          <dt>Temperature</dt>
+          <dd><span id="weather-temperature"></span> &deg;C</dd>
+        </div>
+        <div>
+          <dt>Condition</dt>
+          <dd id="weather-condition"></dd>
+        </div>
+        <div>
+          <dt>Humidity</dt>
+          <dd><span id="weather-humidity"></span>%</dd>
+        </div>
+        <div>
+          <dt>Wind Speed</dt>
+          <dd><span id="weather-wind"></span> km/h</dd>
+        </div>
+      </dl>
+    </section>
+
+    <p class="api-note">Weather data is loaded from the local weather.json file.</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

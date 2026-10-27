@@ -1,0 +1,30 @@
+[
+  {
+    "city": "Chennai",
+    "temperature": 32,
+    "condition": "Sunny",
+    "humidity": 65,
+    "wind": 12
+  },
+  {
+    "city": "Bangalore",
+    "temperature": 28,
+    "condition": "Cloudy",
+    "humidity": 70,
+    "wind": 10
+  },
+  {
+    "city": "Delhi",
+    "temperature": 30,
+    "condition": "Clear",
+    "humidity": 55,
+    "wind": 8
+  },
+  {
+    "city": "Mumbai",
+    "temperature": 31,
+    "condition": "Partly Cloudy",
+    "humidity": 72,
+    "wind": 14
+  }
+]
